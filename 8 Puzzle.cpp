@@ -4,6 +4,10 @@
 
 #define N 3
 
+
+
+
+
 void Single_Text(double x, double y, char *str, void* font=GLUT_BITMAP_TIMES_ROMAN_24)
 {
     glRasterPos3d(x, y, 0);
@@ -11,6 +15,9 @@ void Single_Text(double x, double y, char *str, void* font=GLUT_BITMAP_TIMES_ROM
     glutBitmapCharacter(font, str[i]); // GLUT_BITMAP_TIMES_ROMAN_24
 
 }
+
+
+
 
 
 int new_blank_row,new_blank_col;
@@ -21,6 +28,11 @@ int blank_row,blank_col;
 int position_x[N][N] = {150,250,350,150,250,350,150,250,350};
 int position_y[N][N] = {350,350,350,250,250,250,150,150,150};
 char new_board[N][N] = {'1',  '2',  '3','4',  '5',  '6','7',  '8', '_'};
+
+
+
+
+
 
 
 
@@ -47,18 +59,18 @@ char apply_move(unsigned char key)
 
     switch (key)
     {
-        case GLUT_KEY_UP:
-            new_blank_row = blank_row + 1;
-            break;
-        case GLUT_KEY_DOWN:
-            new_blank_row = blank_row - 1;
-            break;
-        case GLUT_KEY_RIGHT:
-            new_blank_col = blank_col - 1;
-            break;
-        case GLUT_KEY_LEFT:
-            new_blank_col = blank_col + 1;
-            break;
+    case GLUT_KEY_UP:
+        new_blank_row = blank_row + 1;
+        break;
+    case GLUT_KEY_DOWN:
+        new_blank_row = blank_row - 1;
+        break;
+    case GLUT_KEY_RIGHT:
+        new_blank_col = blank_col - 1;
+        break;
+    case GLUT_KEY_LEFT:
+        new_blank_col = blank_col + 1;
+        break;
     }
 
     if ((new_blank_row >= 0 && new_blank_row < 3) && (new_blank_col >= 0 && new_blank_col < 3))
@@ -72,6 +84,9 @@ char apply_move(unsigned char key)
 }
 
 
+
+
+
 void shuffle_board()
 {
 
@@ -81,18 +96,18 @@ void shuffle_board()
         int shuffler = rand() % 4;
         switch (shuffler)
         {
-            case 0:
-                apply_move(GLUT_KEY_UP);
-                break;
-            case 1:
-                apply_move(GLUT_KEY_DOWN);
-                break;
-            case 2:
-                apply_move(GLUT_KEY_RIGHT);
-                break;
-            case 3:
-                apply_move(GLUT_KEY_LEFT);
-                break;
+        case 0:
+            apply_move(GLUT_KEY_UP);
+            break;
+        case 1:
+            apply_move(GLUT_KEY_DOWN);
+            break;
+        case 2:
+            apply_move(GLUT_KEY_RIGHT);
+            break;
+        case 3:
+            apply_move(GLUT_KEY_LEFT);
+            break;
 
         }
 
@@ -101,11 +116,14 @@ void shuffle_board()
 
 
 
+
+
+
 void check_win()
 {
     char board[N][N] = {{'1',  '2',  '3' },
-                        {'4',  '5',  '6' },
-                        {'7',  '8', '_'}
+        {'4',  '5',  '6' },
+        {'7',  '8', '_'}
     };
 
     int count =0;
@@ -130,6 +148,9 @@ void check_win()
 
 
 
+
+
+
 void store_last_board(int button, int state)
 {
     FILE *f1;
@@ -146,6 +167,11 @@ void store_last_board(int button, int state)
 
 }
 
+
+
+
+
+
 void access_last_board()
 {
 
@@ -161,6 +187,7 @@ void access_last_board()
     }
 
 }
+
 
 
 
@@ -219,6 +246,8 @@ void iDraw()
 }
 
 
+
+
 /*
 	function iMouseMove() is called when the user presses and drags the mouse.
 	(mx, my) is the position where the mouse pointer is.
@@ -228,6 +257,9 @@ void iMouseMove(int mx, int my)
 //    printf("x = %d, y= %d\n",mx,my);
 
 }
+
+
+
 
 /*
 	function iMouse() is called when the user presses/releases the mouse.
@@ -263,6 +295,9 @@ void iMouse(int button, int state, int mx, int my)
 
 }
 
+
+
+
 /*
 	function iKeyboard() is called whenever the user hits a key in keyboard.
 	key- holds the ASCII value of the key pressed.
@@ -293,10 +328,33 @@ void iSpecialKeyboard(unsigned char key)
 }
 
 
+
+
+int solvable( ){
+    int inv_count = 0;
+    for (int i = 0; i < 9 - 1; i++) {
+        for (int j = i + 1; j < 9; j++) {
+           
+            if (new_board[j] && new_board[i] && new_board[i] > new_board[j]) { inv_count++; }
+        }
+    }
+
+    return inv_count;
+
+
+}
+
+
+
+
 int main()
 {
     //PlaySound("C:\\MinGW\\IGraphics-master\\p_sound.wav",NULL,SND_ASYNC |SND_LOOP);
-    shuffle_board();
+    //shuffle_board();
+	
+    if(solvable()%2 == 0){
+        shuffle_board();
+    }
     iInitialize(500, 500, "8 Puzzle!");
 
     return 0;
